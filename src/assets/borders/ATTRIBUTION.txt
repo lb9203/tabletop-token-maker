@@ -1,0 +1,12 @@
+Token Stamp borders by RollAdvantage
+Source: https://rolladvantage.com/tokenstamp/
+License: Creative Commons Attribution 4.0 International
+https://creativecommons.org/licenses/by/4.0/
+
+Original assets (downloaded without modification):
+https://rolladvantage.com/images/token_stamp_2/borders/fifthed_border_medium.png
+https://rolladvantage.com/images/token_stamp_2/borders/fifthed_border_medium_greyscale.png
+https://rolladvantage.com/images/token_stamp_2/borders/fifthed_border_mask.gif
+
+The application scales and composites these assets with user artwork.
+RollAdvantage is not affiliated with this application.

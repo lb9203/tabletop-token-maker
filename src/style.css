@@ -1,0 +1,495 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-canvas: var(--theme-canvas);
+  --color-panel: var(--theme-panel);
+  --color-line: var(--theme-line);
+  --color-accent: var(--theme-accent);
+  --color-accent-ink: var(--theme-accent-ink);
+  --color-muted: var(--theme-muted);
+  --color-ink: var(--theme-ink);
+  --color-soft: var(--theme-soft);
+  --color-crop: #c2e790;
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  color-scheme: light;
+  --theme-canvas: #edf0f3;
+  --theme-panel: #ffffff;
+  --theme-line: #cbd2d9;
+  --theme-accent: #386b1c;
+  --theme-accent-ink: #ffffff;
+  --theme-muted: #596571;
+  --theme-ink: #202a33;
+  --theme-soft: #e4e9ee;
+  --checker: #d0d7dd;
+  --checker-tile: #e9edf0;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --theme-canvas: #11161b;
+  --theme-panel: #191f26;
+  --theme-line: #37414c;
+  --theme-accent: #c2e790;
+  --theme-accent-ink: #1b2b12;
+  --theme-muted: #a1aeb9;
+  --theme-ink: #e4e8ed;
+  --theme-soft: #28323b;
+  --checker: #30363c;
+  --checker-tile: #454b51;
+}
+
+@layer base {
+  html,
+  body,
+  #app {
+    @apply h-full overflow-hidden;
+  }
+  body {
+    @apply m-0 bg-canvas font-sans text-ink antialiased;
+  }
+  button,
+  select,
+  input {
+    font: inherit;
+  }
+  button {
+    @apply cursor-pointer;
+  }
+  button:disabled {
+    @apply cursor-not-allowed opacity-40;
+  }
+  button:focus-visible,
+  a:focus-visible,
+  select:focus-visible,
+  input:focus-visible,
+  [role="button"]:focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent;
+  }
+  h2 {
+    @apply flex items-center gap-2 text-xs font-semibold;
+  }
+}
+
+@layer components {
+  .panel {
+    @apply min-h-0 min-w-0 rounded-lg border border-line bg-panel;
+  }
+  .panel-header {
+    @apply flex h-11 shrink-0 items-center justify-between gap-2 border-b border-line px-3;
+  }
+  .panel-header h2 svg {
+    @apply size-4 text-muted;
+  }
+  .button {
+    @apply flex min-h-8 items-center justify-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors;
+  }
+  .button svg {
+    @apply size-4 shrink-0;
+  }
+  .subtle {
+    @apply bg-soft text-ink hover:bg-line;
+  }
+  .primary {
+    @apply w-full bg-accent text-accent-ink enabled:hover:brightness-110;
+  }
+  .add {
+    @apply w-full border border-line bg-soft text-ink enabled:hover:border-accent;
+  }
+  .field-title {
+    @apply mb-1 block text-[11px] font-medium text-muted;
+  }
+  .segmented {
+    @apply flex min-w-0 gap-1 rounded-md border border-line bg-canvas p-0.5;
+  }
+  .segmented button {
+    @apply flex min-w-0 flex-1 items-center justify-center gap-1 rounded px-2 py-1.5 text-xs text-muted;
+  }
+  .segmented button.active {
+    @apply bg-accent/15 text-accent;
+  }
+  .segmented svg {
+    @apply size-3.5;
+  }
+  .size-field label {
+    @apply flex justify-between gap-1;
+  }
+  .size-field label span {
+    @apply font-normal tabular-nums;
+  }
+  input[type="range"] {
+    @apply block h-5 w-full cursor-pointer accent-accent;
+  }
+  select {
+    @apply h-8 w-full min-w-0 rounded-md border border-line bg-canvas px-1.5 text-xs text-ink;
+  }
+  .token-card {
+    @apply flex min-w-0 items-center gap-1 rounded-md border border-line bg-panel px-2 py-1;
+  }
+  .token-card.active {
+    @apply border-accent bg-accent/10;
+  }
+  .token-select {
+    @apply flex min-w-0 flex-1 items-center gap-2 bg-transparent text-left;
+  }
+  .preview {
+    @apply size-10 shrink-0 border border-line;
+  }
+  .preview.circle {
+    @apply rounded-full;
+  }
+  .token-meta {
+    @apply flex min-w-0 flex-col gap-0.5;
+  }
+  .token-meta strong {
+    @apply truncate text-xs font-medium;
+  }
+  .token-meta small {
+    @apply truncate text-[10px] text-muted capitalize;
+  }
+  .token-actions {
+    @apply flex gap-0.5;
+  }
+  .token-actions button {
+    @apply grid size-7 place-items-center rounded text-muted hover:bg-soft hover:text-ink;
+  }
+  .token-actions svg {
+    @apply size-3.5;
+  }
+}
+
+/* Only the image area grows. Settings and the paged token strip keep their height. */
+.workspace {
+  @apply grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)_auto] gap-2;
+}
+.editor {
+  @apply flex flex-col;
+}
+.controls {
+  @apply grid grid-cols-2 overflow-hidden;
+}
+.cutout-settings,
+.export-settings {
+  @apply grid min-w-0 content-start gap-1.5 p-2;
+}
+.cutout-settings {
+  @apply border-r border-line;
+}
+.controls h2 {
+  @apply hidden;
+}
+.token-id {
+  @apply hidden;
+}
+.export-fields {
+  @apply grid min-w-0 grid-cols-2 gap-1;
+}
+.image-area {
+  @apply relative flex min-h-0 min-w-0 flex-1 items-center justify-center p-4;
+  background:
+    radial-gradient(var(--theme-line) 1px, transparent 1px) 0 0 / 16px 16px,
+    var(--theme-canvas);
+}
+.image-stage {
+  @apply relative shrink-0 select-none;
+  line-height: 0;
+}
+.image-stage > img {
+  @apply pointer-events-none block size-full;
+}
+.editor-footer {
+  @apply flex h-6 shrink-0 items-center justify-between gap-2 border-t border-line px-2 text-[10px] text-muted;
+}
+.editor-footer span {
+  @apply truncate;
+}
+.editor-footer span:last-child {
+  @apply hidden sm:block;
+}
+.upload-zone {
+  @apply flex size-full flex-col items-center justify-center gap-2 text-xs text-muted;
+}
+.upload-zone strong {
+  @apply text-sm font-medium text-ink;
+}
+.upload-zone > svg {
+  @apply text-accent;
+}
+.drop-overlay {
+  @apply pointer-events-none absolute inset-2 z-10 grid place-items-center rounded-md border-2 border-dashed border-accent bg-panel/95 text-sm text-accent;
+}
+.error {
+  @apply flex shrink-0 items-center justify-between gap-2 rounded-md border border-red-500/50 bg-red-500/10 px-3 py-1.5 text-xs text-ink;
+}
+.error button {
+  @apply flex shrink-0;
+}
+.token-gallery {
+  @apply grid shrink-0 gap-1.5;
+}
+.gallery-header {
+  @apply flex h-6 items-center justify-between gap-2 text-[11px] text-muted;
+}
+.gallery-header button {
+  @apply rounded border border-line bg-panel px-2 py-0.5 text-xs text-ink disabled:opacity-40;
+}
+.token-strip {
+  @apply grid h-14 min-w-0 gap-2;
+}
+.empty-party {
+  @apply flex h-14 items-center justify-center rounded-md border border-dashed border-line text-xs text-muted;
+}
+
+/* Image overlays use a consistent high-contrast color in either theme. */
+.cutout {
+  @apply absolute touch-none cursor-move border-2 border-crop bg-crop/5;
+}
+.cutout.circle {
+  @apply rounded-full;
+}
+.cutout:not(.selected) {
+  @apply border-dashed border-white/80;
+}
+.cutout.selected {
+  @apply z-2 ring-2 ring-crop/20;
+}
+.token-number {
+  @apply absolute -top-3 left-1/2 h-5 min-w-5 -translate-x-1/2 rounded bg-crop text-center text-[10px] leading-5 font-bold text-[#1d3014];
+}
+.cutout:not(.selected) .token-number {
+  @apply bg-slate-200 text-slate-800;
+}
+.crosshair {
+  @apply absolute top-1/2 left-1/2 -translate-1/2 text-xl leading-none text-white;
+  text-shadow: 0 1px 2px #000;
+}
+.resize-handle {
+  @apply absolute size-4 translate-1/2 touch-none cursor-nwse-resize rounded-sm border-2 border-[#1f2b16] bg-crop p-0;
+  right: -1px;
+  bottom: -1px;
+}
+.cutout.circle .resize-handle {
+  /* (1 - 1/√2) / 2 of the diameter, corrected for the 2px crop border.
+     Translation keeps the handle's center on the border at every crop size. */
+  right: calc(14.6446609407% - 0.7071067812px);
+  bottom: calc(14.6446609407% - 0.7071067812px);
+}
+.cutout:not(.selected) .resize-handle {
+  @apply opacity-0;
+}
+.checker {
+  background-color: var(--checker);
+  background-image:
+    linear-gradient(45deg, var(--checker-tile) 25%, transparent 25%),
+    linear-gradient(-45deg, var(--checker-tile) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, var(--checker-tile) 75%),
+    linear-gradient(-45deg, transparent 75%, var(--checker-tile) 75%);
+  background-size: 12px 12px;
+  background-position:
+    0 0,
+    0 6px,
+    6px -6px,
+    -6px 0;
+}
+
+@media (min-width: 900px) and (min-height: 600px) {
+  .workspace {
+    @apply grid-cols-[minmax(0,1fr)_248px] grid-rows-1;
+  }
+  .controls {
+    @apply flex flex-col;
+  }
+  .cutout-settings,
+  .export-settings {
+    @apply gap-3 p-3;
+  }
+  .cutout-settings {
+    @apply border-r-0 border-b border-line;
+  }
+  .controls h2 {
+    @apply flex;
+  }
+  .token-id {
+    @apply block text-[11px] text-muted;
+  }
+  .token-strip,
+  .empty-party {
+    @apply h-25;
+  }
+  .token-card .preview {
+    @apply size-21;
+  }
+}
+
+/* Short landscape windows keep compact controls beside the image. */
+@media (min-width: 600px) and (min-height: 360px) and (max-height: 599px) {
+  .workspace {
+    @apply grid-cols-[minmax(0,1fr)_320px] grid-rows-1;
+  }
+}
+
+@media (max-height: 450px) {
+  .panel-header {
+    @apply h-9;
+  }
+  .editor-footer {
+    @apply hidden;
+  }
+  .image-area {
+    @apply p-3;
+  }
+  .upload-zone > svg,
+  .upload-zone > span {
+    @apply hidden;
+  }
+  .gallery-header {
+    @apply h-5;
+  }
+  .token-strip,
+  .empty-party {
+    @apply h-12;
+  }
+  .preview {
+    @apply size-8;
+  }
+}
+
+.gallery-pagination {
+  @apply flex items-center gap-1.5;
+}
+.gallery-pagination .button {
+  @apply h-6 min-h-6 px-2 py-0 text-[11px];
+}
+.empty-party {
+  @apply col-span-full;
+}
+
+/* A compact preview row on narrow screens; use spare sidebar height on desktop. */
+.selected-preview {
+  @apply col-span-2 flex min-h-0 items-center justify-between gap-2 border-t border-line p-1.5;
+}
+.selected-preview-header {
+  @apply flex min-w-0 flex-1 items-center justify-between gap-2;
+}
+.selected-preview-header > .button {
+  @apply shrink-0;
+}
+.selected-preview h2 {
+  @apply flex min-w-0 flex-col items-start gap-1;
+}
+.selected-preview-image {
+  @apply grid size-14 shrink-0 place-items-center;
+}
+.selected-preview-image .preview {
+  @apply size-full;
+}
+
+@media (min-height: 600px) {
+  .selected-preview-image {
+    @apply size-24;
+  }
+}
+
+@media (min-width: 900px) and (min-height: 600px) {
+  .cutout-settings,
+  .export-settings {
+    @apply gap-2;
+  }
+  .selected-preview {
+    @apply flex-1 flex-col items-stretch gap-2 p-2;
+  }
+  .selected-preview-header {
+    @apply flex-none;
+  }
+  .selected-preview h2 {
+    @apply items-start;
+  }
+  .selected-preview-image {
+    @apply min-h-0 w-full flex-1 shrink;
+    container-type: size;
+  }
+  .selected-preview-image .preview {
+    width: min(100cqw, 100cqh, 192px);
+    height: min(100cqw, 100cqh, 192px);
+  }
+}
+
+@media (min-width: 900px) and (min-height: 600px) and (max-height: 699px) {
+  .cutout-settings > h2,
+  .export-settings > h2,
+  .controls .token-id {
+    @apply hidden;
+  }
+  .cutout-settings,
+  .export-settings {
+    @apply gap-1.5 p-2;
+  }
+}
+
+.border-picker {
+  @apply m-auto max-w-none rounded-xl border border-line bg-panel p-4 text-ink shadow-xl;
+  width: min(36rem, calc(100% - 1.5rem));
+  max-height: calc(100dvh - 1.5rem);
+  overflow: auto;
+}
+.border-picker::backdrop {
+  @apply bg-canvas/80;
+}
+.border-picker-header {
+  @apply mb-3 flex items-center justify-between gap-3;
+}
+.border-picker-header h2 {
+  @apply flex;
+}
+.border-picker-upload {
+  @apply mb-2 flex flex-wrap items-center gap-2;
+}
+.border-picker-upload > span {
+  @apply text-[11px] text-muted;
+}
+.border-picker-upload .button:disabled,
+.border-picker-option:disabled {
+  @apply cursor-wait opacity-50;
+}
+.border-picker-hint {
+  @apply mb-3 text-[11px] text-muted;
+}
+.border-picker-error {
+  @apply mb-3 rounded-md border border-red-500/50 bg-red-500/10 px-3 py-2 text-xs text-ink;
+  overflow-wrap: anywhere;
+}
+.border-picker-count {
+  @apply mb-2 text-[11px] text-muted;
+}
+.border-picker-options {
+  @apply grid grid-cols-3 gap-2;
+}
+.border-picker-option {
+  @apply flex min-w-0 flex-col items-center gap-2 rounded-lg border border-line bg-canvas p-2 text-center text-xs hover:border-accent;
+}
+.border-picker-option[aria-pressed="true"] {
+  @apply border-accent bg-soft ring-1 ring-accent;
+}
+.border-picker-option .preview {
+  @apply h-auto w-full;
+  aspect-ratio: 1;
+  max-width: 120px;
+}
+.border-picker-option > span {
+  overflow-wrap: anywhere;
+}
+.border-picker-empty {
+  @apply py-6 text-center text-xs text-muted;
+}
+.border-picker-attribution {
+  @apply mt-3 text-center text-[11px] text-muted;
+}
+.border-picker-attribution a {
+  @apply underline decoration-line underline-offset-2 hover:text-ink;
+}
+.preview-error {
+  @apply min-w-0 text-center text-[10px] leading-tight text-muted;
+  overflow-wrap: anywhere;
+}
