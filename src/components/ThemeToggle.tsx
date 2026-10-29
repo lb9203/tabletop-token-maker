@@ -29,7 +29,6 @@ export function ThemeToggle() {
           <path d="M20.5 13A9 9 0 0 1 11 3.5 9 9 0 1 0 20.5 13Z" />
         )}
       </svg>
-      {dark ? "Light" : "Dark"}
     </button>
   );
 }

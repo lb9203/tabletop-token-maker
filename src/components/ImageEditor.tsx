@@ -104,16 +104,41 @@ export function ImageEditor({
         }}
       />
       <div class="panel-header">
-        <h2>
-          <Icon name="image" /> Artwork
-        </h2>
-        <div class="flex items-center gap-2">
-          <ThemeToggle />
-          <button class="button subtle" onClick={browse}>
-            <Icon name="upload" />
-            {source ? "Replace image" : "Upload image"}
-          </button>
+        <div class="flex min-w-0 flex-1 items-center gap-2">
+          <h2 class="min-w-0">
+            <span class="truncate">Tabletop Token Maker</span>
+          </h2>
+          <div class="flex shrink-0 items-center gap-1">
+            <a
+              class="button subtle no-underline text-ink"
+              href="https://github.com/lb9203/tabletop-token-maker"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="GitHub repository"
+              title="GitHub repository"
+            >
+              <svg
+                class="size-4"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path d="M12 .297a12 12 0 0 0-3.797 23.382c.6.111.82-.261.82-.577v-2.234c-3.338.726-4.043-1.416-4.043-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.835 2.807 1.305 3.492.998.108-.776.418-1.305.762-1.605-2.665-.304-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.536-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.984-.399 3.004-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.655 1.652.243 2.873.12 3.176.77.84 1.235 1.91 1.235 3.221 0 4.608-2.807 5.624-5.479 5.921.43.372.814 1.102.814 2.222v3.293c0 .319.216.694.825.576A12.001 12.001 0 0 0 12 .297" />
+              </svg>
+            </a>
+            <ThemeToggle />
+          </div>
         </div>
+        <button
+          class="button subtle shrink-0"
+          aria-label={source ? "Replace image" : "Upload image"}
+          onClick={browse}
+        >
+          <Icon name="upload" />
+          <span class="image-upload-label">
+            {source ? "Replace image" : "Upload image"}
+          </span>
+        </button>
       </div>
       <div
         ref={imageArea}

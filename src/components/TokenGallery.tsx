@@ -140,7 +140,7 @@ export function TokenGallery({
   }, [selectedId, capacity, source, tokens.length]);
 
   return (
-    <section class="token-gallery">
+    <section class="token-gallery panel">
       <div class="gallery-header">
         <h2>Tokens</h2>
         <div class="gallery-pagination">
